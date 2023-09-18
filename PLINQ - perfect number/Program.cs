@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,9 +9,44 @@ namespace PLINQ___perfect_number
 {
     internal class Program
     {
-        static void Main(string[] args)
+        public static bool Is_perfect (int num)
         {
-            args = new string[] { };
+            //this is first version     -----     I guess it is slowly because there are a lot of function .ToList() and .Sum()
+            //create to list with divisiors ( div_num_1 - list with div before sqrt  and  div_num_2 after sqrt ) 
+            //var div_num_1 = (from n in Enumerable.Range(1,(int) Math.Sqrt(num)).AsParallel() where (num%n==0) select (n)).ToList();
+            //var div_num_2 = (from n in div_num_1.AsParallel() where (int)num/n != n select (num/n)).ToList();
+            //return (div_num_1.Sum() + div_num_2.Sum() - num)==num;
+            
+            //this is second version without LINQ 
+            int sum_div = 0;
+            foreach (var n in (Enumerable.Range(1, (int)Math.Sqrt(num))).AsParallel())
+            {
+                if (num % n == 0)
+                {
+                    sum_div += n;
+                    if (num / n != n) { sum_div += num/n; }
+                }
+            }
+            return sum_div == 2 * num;
+        }
+        public static void Main(string[] args)
+        {
+            //WITH ASPARALLEL AND WITHOUT LINQ IN FUNCTION 
+
+            //want to calculate time 
+            Stopwatch stopwatch1 = new Stopwatch();
+            stopwatch1.Start();
+
+            //to create our range, and using PLINQ with AsParallel() 
+            IEnumerable<int> numbers = Enumerable.Range(2, 10000000);
+            var perfect_numbers_PLINQ = (from n  in numbers.AsParallel() where Is_perfect(n) select n).ToList();
+            stopwatch1.Stop();
+
+
+            foreach (var n in perfect_numbers_PLINQ) { Console.WriteLine(n); }
+            Console.WriteLine("Time with AsParallel and without LINQ: " + stopwatch1.ElapsedMilliseconds + " мс");
+
+
         }
     }
 }
