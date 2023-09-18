@@ -50,6 +50,7 @@ namespace PLINQ___perfect_number
 
 
                 foreach (var n in perfect_numbers_PLINQ) { Console.WriteLine(n); }
+                Console.WriteLine();
                 Console.WriteLine("Time with AsParallel and without LINQ: " + stopwatch1.ElapsedMilliseconds + " мс");
             }
 
@@ -79,10 +80,15 @@ namespace PLINQ___perfect_number
                 var perfect_numbers_PLINQ = (from n in numbers where Is_perfect_withoutLINQ(n) select n).ToList();
                 stopwatch3.Stop();
 
-
-                foreach (var n in perfect_numbers_PLINQ) { Console.WriteLine(n); }
                 Console.WriteLine("Time without AsParallel: " + stopwatch3.ElapsedMilliseconds + " мс");
             }
+
+
+            //results:
+            //Time with AsParallel and without LINQ: 9707 мс
+            //Time with AsParallel and with LINQ: 193878 мс
+            //Time without AsParallel: 74864 мс
+
 
         }
     }
