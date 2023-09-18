@@ -67,6 +67,23 @@ namespace PLINQ___perfect_number
 
                 Console.WriteLine("Time with AsParallel and with LINQ: " + stopwatch2.ElapsedMilliseconds + " мс");
             }
+
+            //WITHOUT ASPARALLEL
+            {
+                //want to calculate time 
+                Stopwatch stopwatch3 = new Stopwatch();
+                stopwatch3.Start();
+
+                //to create our range, and using PLINQ with AsParallel() 
+                IEnumerable<int> numbers = Enumerable.Range(2, 10000000);
+                var perfect_numbers_PLINQ = (from n in numbers where Is_perfect_withoutLINQ(n) select n).ToList();
+                stopwatch3.Stop();
+
+
+                foreach (var n in perfect_numbers_PLINQ) { Console.WriteLine(n); }
+                Console.WriteLine("Time without AsParallel: " + stopwatch3.ElapsedMilliseconds + " мс");
+            }
+
         }
     }
 }
