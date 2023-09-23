@@ -61,8 +61,8 @@ namespace PLINQ___perfect_number
                 stopwatch2.Start();
 
                 //to create our range, and using PLINQ with AsParallel() 
-                IEnumerable<int> numbers = Enumerable.Range(2, 10000000);
-                var perfect_numbers_PLINQ = (from n in numbers.AsParallel() where Is_perfect_withLINQ(n) select n).ToList();
+                IEnumerable<int> numbers = Enumerable.Range(1, 10000000);
+                var perfect_numbers_PLINQ = (from n in numbers.AsParallel() where (from j in Enumerable.Range(1, (int)(Math.Sqrt(n))) where (n % j == 0 && (n / j) != j) select (n / j + j)).Sum() == n select n).ToList()        ;
                 stopwatch2.Stop();
 
 
@@ -77,7 +77,8 @@ namespace PLINQ___perfect_number
 
                 //to create our range, and using PLINQ with AsParallel() 
                 IEnumerable<int> numbers = Enumerable.Range(2, 10000000);
-                var perfect_numbers_PLINQ = (from n in numbers where Is_perfect_withoutLINQ(n) select n).ToList();
+                var perfect_numbers_PLINQ = (from n in numbers where (from j in Enumerable.Range(1, (int)(Math.Sqrt(n))) 
+                                                                      where (n % j == 0 && (n / j) != j) select (n / j + j)).Sum() == n select n).ToList();
                 stopwatch3.Stop();
 
                 Console.WriteLine("Time without AsParallel: " + stopwatch3.ElapsedMilliseconds + " мс");
